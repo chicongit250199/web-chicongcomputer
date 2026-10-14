@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Chủ - Chí Công Computer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-gray-900 text-white shadow">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-400">💻 CHÍ CÔNG COMPUTER</h1>
+            <div>
+                <% if (user) { %>
+                    <span class="mr-4">Xin chào, <b><%= user.username %></b> (<span class="text-blue-400 uppercase"><%= user.role %></span>)</span>
+                    <% if (user.role === 'staff') { %> <a href="/staff" class="bg-green-600 px-3 py-1.5 rounded mr-2 hover:bg-green-700">Trang Staff</a> <% } %>
+                    <% if (user.role === 'manager') { %> <a href="/manager" class="bg-purple-600 px-3 py-1.5 rounded mr-2 hover:bg-purple-700">Trang Manager</a> <% } %>
+                    <a href="/logout" class="bg-red-600 px-3 py-1.5 rounded hover:bg-red-700">Đăng xuất</a>
+                <% } else { %>
+                    <a href="/login" class="bg-blue-600 px-4 py-2 rounded font-semibold hover:bg-blue-700">Đăng nhập</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Danh Mục Sản Phẩm & Linh Kiện</h2>
+            <a href="https://zalo.me/0905xxxxxx" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">💬 Chat Zalo Tư Vấn</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <% if (products.length === 0) { %>
+                <p class="text-gray-500 col-span-3 text-center py-10">Chưa có sản phẩm nào trong kho.</p>
+            <% } %>
+            <% products.forEach(p => { %>
+                <div class="bg-white p-5 rounded-xl shadow border">
+                    <h3 class="font-bold text-lg text-gray-800"><%= p.name %></h3>
+                    <p class="text-red-600 font-bold text-xl my-2"><%= Number(p.retail_price).toLocaleString() %> VNĐ</p>
+                    <p class="text-sm text-gray-500 mb-4">Bảo hành: <%= p.warranty_npp || 'Theo cửa hàng' %></p>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700">Chi Tiết</button>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+</body>
+</html>

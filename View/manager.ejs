@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Manager - Chí Công Computer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-5xl mx-auto space-y-6">
+        <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+            <h1 class="text-xl font-bold text-purple-600">📊 Quản Lý Tài Chính & Hóa Đơn VAT</h1>
+            <div>
+                <a href="/" class="text-blue-600 font-semibold mr-4 hover:underline">Trang chủ</a>
+                <a href="/logout" class="text-red-600 font-semibold hover:underline">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Thống kê -->
+        <div class="grid grid-cols-3 gap-6">
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-blue-500">
+                <p class="text-sm text-gray-500">Tổng Tiền Đầu Vào (Nhập)</p>
+                <h3 class="text-2xl font-bold text-gray-800"><%= Number(totalIn).toLocaleString() %> đ</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
+                <p class="text-sm text-gray-500">Tổng Tiền Đầu Ra (Bán)</p>
+                <h3 class="text-2xl font-bold text-gray-800"><%= Number(totalOut).toLocaleString() %> đ</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-purple-500">
+                <p class="text-sm text-gray-500">Lợi Nhuận Tạm Tính</p>
+                <h3 class="text-2xl font-bold text-purple-600"><%= Number(totalOut - totalIn).toLocaleString() %> đ</h3>
+            </div>
+        </div>
+
+        <!-- Form Thêm Hóa Đơn -->
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-lg font-bold mb-4 border-b pb-2">🧾 Thêm Hóa Đơn VAT (Đầu Vào / Đầu Ra)</h2>
+            <form action="/manager/invoice/add" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <select name="invoice_type" class="border p-2 rounded-lg" required>
+                    <option value="IN">Hóa đơn Đầu Vào (Nhập)</option>
+                    <option value="OUT">Hóa đơn Đầu Ra (Bán)</option>
+                </select>
+                <input type="text" name="file_name" placeholder="Tên file PDF (VD: hd_01.pdf)" class="border p-2 rounded-lg" required>
+                <input type="text" name="supplier_customer_name" placeholder="Tên NCC hoặc Tên KH" class="border p-2 rounded-lg" required>
+                <input type="number" name="total_amount" placeholder="Tổng tiền (VNĐ)" class="border p-2 rounded-lg" required>
+                <button type="submit" class="md:col-span-4 bg-purple-600 text-white font-bold py-2 rounded-lg hover:bg-purple-700">Lưu Hóa Đơn</button>
+            </form>
+        </div>
+
+        <!-- Bảng danh sách Hóa đơn -->
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-lg font-bold mb-4">Danh Sách Hóa Đơn Đã Lưu</h2>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 text-sm">
+                        <th class="p-3 border">ID</th>
+                        <th class="p-3 border">Loại</th>
+                        <th class="p-3 border">File PDF</th>
+                        <th class="p-3 border">NCC / Khách Hàng</th>
+                        <th class="p-3 border">Tổng Tiền</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <% invoices.forEach(inv => { %>
+                        <tr>
+                            <td class="p-3 border"><%= inv.id %></td>
+                            <td class="p-3 border">
+                                <% if(inv.invoice_type === 'IN') { %>
+                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded font-bold">ĐẦU VÀO</span>
+                                <% } else { %>
+                                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded font-bold">ĐẦU RA</span>
+                                <% } %>
+                            </td>
+                            <td class="p-3 border text-blue-600 font-semibold"><%= inv.file_name %></td>
+                            <td class="p-3 border"><%= inv.supplier_customer_name %></td>
+                            <td class="p-3 border font-bold text-gray-800"><%= Number(inv.total_amount).toLocaleString() %> đ</td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

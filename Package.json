@@ -1,0 +1,16 @@
+{
+  "name": "web-chicongcomputer",
+  "version": "1.0.0",
+  "description": "He thong quan ly noi bo Chi Cong Computer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "sqlite3": "^5.1.7"
+  }
+}

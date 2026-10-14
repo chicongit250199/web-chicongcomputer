@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Khu Vực Staff - Chí Công Computer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto space-y-6">
+        <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+            <h1 class="text-xl font-bold text-green-600">🛠️ Khu Vực Kỹ Thuật & Tiếp Nhận Máy</h1>
+            <div>
+                <a href="/staff/history" class="text-blue-600 font-semibold mr-4 hover:underline">🔍 Tra cứu SĐT khách</a>
+                <a href="/" class="text-blue-600 font-semibold mr-4 hover:underline">Trang chủ</a>
+                <a href="/logout" class="text-red-600 font-semibold hover:underline">Đăng xuất</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Form Nhận Máy -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2">📥 Nhận Máy Mới (Check-in)</h2>
+                <form action="/staff/repair/add" method="POST" class="space-y-4">
+                    <input type="text" name="machine_name" placeholder="Tên máy / Model (Ví dụ: Dell Latitude 5420)" class="w-full border p-2 rounded-lg" required>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" name="customer_name" placeholder="Tên khách hàng" class="w-full border p-2 rounded-lg" required>
+                        <input type="text" name="customer_phone" placeholder="Số điện thoại KH" class="w-full border p-2 rounded-lg" required>
+                    </div>
+                    <textarea name="issue_status" placeholder="Tình trạng lỗi thực tế..." class="w-full border p-2 rounded-lg" required></textarea>
+                    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded-lg hover:bg-green-700">Lưu Thông Tin Nhận Máy</button>
+                </form>
+            </div>
+
+            <!-- Danh sách Task -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-lg font-bold mb-4 border-b pb-2">📋 Danh Sách Máy Sửa Chữa</h2>
+                <div class="space-y-3 max-h-96 overflow-y-auto">
+                    <% repairs.forEach(r => { %>
+                        <div class="p-3 border rounded-lg bg-gray-50 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-gray-800"><%= r.machine_name %> (<%= r.customer_name %> - <%= r.customer_phone %>)</h4>
+                                <p class="text-xs text-gray-600">Lỗi: <%= r.issue_status %></p>
+                                <p class="text-xs font-semibold mt-1">Trạng thái: 
+                                    <% if(r.repair_status === 'pending') { %><span class="text-yellow-600">Đang xử lý</span><% } else { %><span class="text-green-600">Đã trả máy (<%= Number(r.price).toLocaleString() %>đ)</span><% } %>
+                                </p>
+                            </div>
+                            <% if(r.repair_status === 'pending') { %>
+                                <form action="/staff/repair/return/<%= r.id %>" method="POST" class="flex flex-col space-y-1">
+                                    <input type="number" name="price" placeholder="Giá tiền" class="border px-2 py-1 text-xs w-24 rounded" required>
+                                    <select name="payment_method" class="border px-2 py-1 text-xs rounded">
+                                        <option value="Tiền mặt">Tiền mặt</option>
+                                        <option value="Chuyển khoản">Chuyển khoản</option>
+                                    </select>
+                                    <button type="submit" class="bg-blue-600 text-white text-xs px-2 py-1 rounded hover:bg-blue-700">Trả máy</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
